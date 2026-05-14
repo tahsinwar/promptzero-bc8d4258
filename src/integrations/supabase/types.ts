@@ -53,6 +53,87 @@ export type Database = {
         }
         Relationships: []
       }
+      collection_prompts: {
+        Row: {
+          added_at: string
+          collection_id: string
+          display_order: number
+          prompt_id: string
+        }
+        Insert: {
+          added_at?: string
+          collection_id: string
+          display_order?: number
+          prompt_id: string
+        }
+        Update: {
+          added_at?: string
+          collection_id?: string
+          display_order?: number
+          prompt_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_prompts_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_prompts_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collections: {
+        Row: {
+          accent_color: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          icon: string | null
+          id: string
+          is_featured: boolean
+          is_published: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           author_name: string
