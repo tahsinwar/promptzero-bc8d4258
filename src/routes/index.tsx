@@ -13,6 +13,7 @@ import { useViewMode } from "@/hooks/use-bookmarks";
 import { applyPromptVisibility } from "@/lib/prompt-visibility";
 import { useAuth } from "@/hooks/use-auth";
 import { AI_TOOLS, CAT_COLOR } from "@/lib/ai-tools";
+import { AILogo } from "@/components/ai-logo";
 
 const STALE = 5 * 60 * 1000;
 
@@ -275,11 +276,11 @@ function HomePage() {
                   style={active ? { borderColor: color } : undefined}
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <div className="grid h-9 w-9 place-items-center rounded-lg" style={{ backgroundColor: `${color.replace(")", " / 0.15)")}`, color }}>
-                      <Icon style={{ width: 18, height: 18 }} />
+                    <div className="grid h-9 w-9 place-items-center rounded-lg overflow-hidden" style={{ backgroundColor: `${color.replace(")", " / 0.12)")}`, color }}>
+                      <AILogo tool={t} size={20} />
                     </div>
                     <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md" style={{ backgroundColor: `${color.replace(")", " / 0.12)")}`, color }}>
-                      {t.cat}
+                      <span className="inline-flex items-center gap-1"><Icon style={{ width: 10, height: 10 }} />{t.cat}</span>
                     </span>
                   </div>
                   <div className="font-semibold text-sm">{t.name}</div>
