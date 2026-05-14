@@ -68,22 +68,23 @@ function CollectionDetail() {
   }
 
   const { collection, prompts } = data;
+  const accent = collection.accent_color || "#6366f1";
 
   return (
     <div>
       {/* Hero */}
       <section
         className="relative overflow-hidden border-b border-border"
-        style={{ background: `linear-gradient(180deg, ${collection.accent_color}1a 0%, transparent 100%)` }}
+        style={{ background: `linear-gradient(180deg, ${accent}1a 0%, transparent 100%)` }}
       >
-        <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-80 w-80 rounded-full opacity-30 blur-3xl" style={{ backgroundColor: collection.accent_color }} />
+        <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-80 w-80 rounded-full opacity-30 blur-3xl" style={{ backgroundColor: accent }} />
         <div className="relative mx-auto max-w-5xl px-6 py-16 text-center">
           <Link to="/collections" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="h-4 w-4" /> All collections
           </Link>
           <div
             className="mx-auto grid h-20 w-20 place-items-center rounded-2xl text-4xl mb-6"
-            style={{ backgroundColor: `${collection.accent_color}25`, color: collection.accent_color }}
+            style={{ backgroundColor: `${accent}25`, color: accent }}
           >
             {collection.icon || <Layers className="h-8 w-8" />}
           </div>
