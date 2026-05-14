@@ -100,9 +100,28 @@ function CollectionsPage() {
           })}
         </div>
       ) : (
-        <div className="text-center py-16">
-          <Layers className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-          <p className="text-muted-foreground">No collections published yet. Check back soon!</p>
+        <div className="vault-card rounded-2xl py-16 px-6 text-center max-w-2xl mx-auto">
+          <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-primary/10 text-primary">
+            <Layers className="h-6 w-6" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Collections coming soon</h2>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            We&apos;re curating themed bundles like Marketing Pack & Coding Essentials. In the meantime, explore all prompts.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/browse"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:opacity-90 transition"
+            >
+              Browse all prompts <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition"
+            >
+              Back to home
+            </Link>
+          </div>
         </div>
       )}
     </div>
