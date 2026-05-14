@@ -12,6 +12,7 @@ import { LoadError } from "@/components/load-error";
 import { useViewMode } from "@/hooks/use-bookmarks";
 import { applyPromptVisibility } from "@/lib/prompt-visibility";
 import { useAuth } from "@/hooks/use-auth";
+import { AI_TOOLS, CAT_COLOR } from "@/lib/ai-tools";
 
 const STALE = 5 * 60 * 1000;
 
@@ -27,26 +28,7 @@ const DIFFICULTIES = ["beginner", "intermediate", "advanced"] as const;
 type Difficulty = typeof DIFFICULTIES[number];
 
 type AICategory = "Text" | "Image" | "Video" | "Audio";
-const AI_TOOLS: { name: string; cat: AICategory }[] = [
-  { name: "ChatGPT", cat: "Text" }, { name: "Claude", cat: "Text" },
-  { name: "Gemini", cat: "Text" }, { name: "Grok", cat: "Text" },
-  { name: "Perplexity", cat: "Text" }, { name: "Mistral", cat: "Text" },
-  { name: "LLaMA", cat: "Text" }, { name: "GitHub Copilot", cat: "Text" },
-  { name: "Notion AI", cat: "Text" }, { name: "Jasper", cat: "Text" },
-  { name: "Midjourney", cat: "Image" }, { name: "Stable Diffusion", cat: "Image" },
-  { name: "DALL·E", cat: "Image" }, { name: "Leonardo AI", cat: "Image" },
-  { name: "Ideogram", cat: "Image" }, { name: "Adobe Firefly", cat: "Image" },
-  { name: "Runway", cat: "Video" }, { name: "Sora", cat: "Video" },
-  { name: "Pika", cat: "Video" }, { name: "HeyGen", cat: "Video" },
-  { name: "ElevenLabs", cat: "Audio" },
-];
 const CAT_ICON: Record<AICategory, typeof Bot> = { Text: Bot, Image: ImageIcon, Video, Audio: Music };
-const CAT_COLOR: Record<AICategory, string> = {
-  Text: "oklch(0.72 0.22 295)",
-  Image: "oklch(0.78 0.18 200)",
-  Video: "oklch(0.70 0.20 30)",
-  Audio: "oklch(0.74 0.20 145)",
-};
 
 type HomeSearch = {
   q?: string;
@@ -278,27 +260,31 @@ function HomePage() {
             const active = search.ai === t.name;
             const color = CAT_COLOR[t.cat];
             return (
-              <motion.button
+              <motion.div
                 key={t.name}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, delay: Math.min(idx * 0.04, 0.5), ease: "easeOut" }}
                 whileHover={{ y: -4 }}
-                onClick={() => setParams({ ai: active ? undefined : t.name })}
-                className={`vault-card rounded-xl p-4 text-left transition-all ${active ? "ring-2 ring-primary shadow-glow" : ""}`}
-                style={active ? { borderColor: color } : undefined}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="grid h-9 w-9 place-items-center rounded-lg" style={{ backgroundColor: `${color}22`, color }}>
-                    <Icon className="h-4.5 w-4.5" style={{ width: 18, height: 18 }} />
+                <Link
+                  to="/ai/$slug"
+                  params={{ slug: t.slug }}
+                  className={`vault-card rounded-xl p-4 text-left transition-all block h-full ${active ? "ring-2 ring-primary shadow-glow" : ""}`}
+                  style={active ? { borderColor: color } : undefined}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="grid h-9 w-9 place-items-center rounded-lg" style={{ backgroundColor: `${color.replace(")", " / 0.15)")}`, color }}>
+                      <Icon style={{ width: 18, height: 18 }} />
+                    </div>
+                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md" style={{ backgroundColor: `${color.replace(")", " / 0.12)")}`, color }}>
+                      {t.cat}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md" style={{ backgroundColor: `${color}1f`, color }}>
-                    {t.cat}
-                  </span>
-                </div>
-                <div className="font-semibold text-sm">{t.name}</div>
-              </motion.button>
+                  <div className="font-semibold text-sm">{t.name}</div>
+                </Link>
+              </motion.div>
             );
           })}
         </div>
