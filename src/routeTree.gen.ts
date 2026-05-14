@@ -26,6 +26,7 @@ import { Route as AdminCommentsRouteImport } from './routes/admin.comments'
 import { Route as AdminCollectionsRouteImport } from './routes/admin.collections'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminPromptsIndexRouteImport } from './routes/admin.prompts.index'
+import { Route as AdminCollectionsIndexRouteImport } from './routes/admin.collections.index'
 import { Route as ApiPublicVaultRouteImport } from './routes/api.public.vault'
 import { Route as AdminPromptsIdRouteImport } from './routes/admin.prompts.$id'
 
@@ -114,6 +115,11 @@ const AdminPromptsIndexRoute = AdminPromptsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminPromptsRoute,
 } as any)
+const AdminCollectionsIndexRoute = AdminCollectionsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminCollectionsRoute,
+} as any)
 const ApiPublicVaultRoute = ApiPublicVaultRouteImport.update({
   id: '/api/public/vault',
   path: '/api/public/vault',
@@ -132,7 +138,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/collections': typeof AdminCollectionsRoute
+  '/admin/collections': typeof AdminCollectionsRouteWithChildren
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/prompts': typeof AdminPromptsRouteWithChildren
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/admin/prompts/$id': typeof AdminPromptsIdRoute
   '/api/public/vault': typeof ApiPublicVaultRoute
+  '/admin/collections/': typeof AdminCollectionsIndexRoute
   '/admin/prompts/': typeof AdminPromptsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -152,7 +159,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/collections': typeof AdminCollectionsRoute
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/security': typeof AdminSecurityRoute
@@ -163,6 +169,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/admin/prompts/$id': typeof AdminPromptsIdRoute
   '/api/public/vault': typeof ApiPublicVaultRoute
+  '/admin/collections': typeof AdminCollectionsIndexRoute
   '/admin/prompts': typeof AdminPromptsIndexRoute
 }
 export interface FileRoutesById {
@@ -173,7 +180,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/collections': typeof AdminCollectionsRoute
+  '/admin/collections': typeof AdminCollectionsRouteWithChildren
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/prompts': typeof AdminPromptsRouteWithChildren
@@ -185,6 +192,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/admin/prompts/$id': typeof AdminPromptsIdRoute
   '/api/public/vault': typeof ApiPublicVaultRoute
+  '/admin/collections/': typeof AdminCollectionsIndexRoute
   '/admin/prompts/': typeof AdminPromptsIndexRoute
 }
 export interface FileRouteTypes {
@@ -208,6 +216,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/prompts/$id'
     | '/api/public/vault'
+    | '/admin/collections/'
     | '/admin/prompts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -216,7 +225,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/saved'
     | '/admin/categories'
-    | '/admin/collections'
     | '/admin/comments'
     | '/admin/deploy'
     | '/admin/security'
@@ -227,6 +235,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/prompts/$id'
     | '/api/public/vault'
+    | '/admin/collections'
     | '/admin/prompts'
   id:
     | '__root__'
@@ -248,6 +257,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/prompts/$id'
     | '/api/public/vault'
+    | '/admin/collections/'
     | '/admin/prompts/'
   fileRoutesById: FileRoutesById
 }
@@ -384,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPromptsIndexRouteImport
       parentRoute: typeof AdminPromptsRoute
     }
+    '/admin/collections/': {
+      id: '/admin/collections/'
+      path: '/'
+      fullPath: '/admin/collections/'
+      preLoaderRoute: typeof AdminCollectionsIndexRouteImport
+      parentRoute: typeof AdminCollectionsRoute
+    }
     '/api/public/vault': {
       id: '/api/public/vault'
       path: '/api/public/vault'
@@ -401,6 +418,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminCollectionsRouteChildren {
+  AdminCollectionsIndexRoute: typeof AdminCollectionsIndexRoute
+}
+
+const AdminCollectionsRouteChildren: AdminCollectionsRouteChildren = {
+  AdminCollectionsIndexRoute: AdminCollectionsIndexRoute,
+}
+
+const AdminCollectionsRouteWithChildren =
+  AdminCollectionsRoute._addFileChildren(AdminCollectionsRouteChildren)
+
 interface AdminPromptsRouteChildren {
   AdminPromptsIdRoute: typeof AdminPromptsIdRoute
   AdminPromptsIndexRoute: typeof AdminPromptsIndexRoute
@@ -417,7 +445,7 @@ const AdminPromptsRouteWithChildren = AdminPromptsRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminCollectionsRoute: typeof AdminCollectionsRoute
+  AdminCollectionsRoute: typeof AdminCollectionsRouteWithChildren
   AdminCommentsRoute: typeof AdminCommentsRoute
   AdminDeployRoute: typeof AdminDeployRoute
   AdminPromptsRoute: typeof AdminPromptsRouteWithChildren
@@ -428,7 +456,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminCollectionsRoute: AdminCollectionsRoute,
+  AdminCollectionsRoute: AdminCollectionsRouteWithChildren,
   AdminCommentsRoute: AdminCommentsRoute,
   AdminDeployRoute: AdminDeployRoute,
   AdminPromptsRoute: AdminPromptsRouteWithChildren,
