@@ -498,7 +498,7 @@ function HomePage() {
 
 function Stat({ label, value, icon: Icon }: { label: string; value: number | string; icon: React.ComponentType<{ className?: string }> }) {
   const isNumber = typeof value === "number";
-  const animated = useCountUp(isNumber ? (value as number) : 0, 1200);
+  const animated = useCountUp(isNumber ? (value as number) : 0, 1200, `stat:${label}`);
   return (
     <div className="vault-card rounded-xl px-4 py-5">
       <Icon className="mx-auto h-5 w-5 text-primary mb-2" />
@@ -508,11 +508,19 @@ function Stat({ label, value, icon: Icon }: { label: string; value: number | str
   );
 }
 
-function useCountUp(target: number, duration = 1200) {
-  const [n, setN] = useState(0);
+const countUpSeen = new Set<string>();
+
+function useCountUp(target: number, duration = 1200, key?: string) {
+  // Skip animation if we've already played it this browser session for this key.
+  const alreadySeen = key ? countUpSeen.has(key) : false;
+  const [n, setN] = useState(alreadySeen ? target : 0);
   const startRef = useRef<number | null>(null);
   const fromRef = useRef(0);
   useEffect(() => {
+    if (key && countUpSeen.has(key)) {
+      setN(target);
+      return;
+    }
     fromRef.current = n;
     startRef.current = null;
     let raf = 0;
@@ -521,7 +529,11 @@ function useCountUp(target: number, duration = 1200) {
       const p = Math.min(1, (t - startRef.current) / duration);
       const eased = 1 - Math.pow(1 - p, 3);
       setN(Math.round(fromRef.current + (target - fromRef.current) * eased));
-      if (p < 1) raf = requestAnimationFrame(step);
+      if (p < 1) {
+        raf = requestAnimationFrame(step);
+      } else if (key) {
+        countUpSeen.add(key);
+      }
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
