@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -39,6 +40,11 @@ const SavedRoute = SavedRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsRoute = CollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrowseRoute = BrowseRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/collections': typeof CollectionsRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/collections': typeof CollectionsRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/collections': typeof CollectionsRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/collections'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/browse'
+    | '/collections'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/collections'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -277,6 +289,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   BrowseRoute: typeof BrowseRoute
+  CollectionsRoute: typeof CollectionsRoute
   LoginRoute: typeof LoginRoute
   SavedRoute: typeof SavedRoute
   PSlugRoute: typeof PSlugRoute
@@ -299,6 +312,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections': {
+      id: '/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof CollectionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/browse': {
@@ -492,6 +512,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   BrowseRoute: BrowseRoute,
+  CollectionsRoute: CollectionsRoute,
   LoginRoute: LoginRoute,
   SavedRoute: SavedRoute,
   PSlugRoute: PSlugRoute,
