@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -18,15 +19,19 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SCodeRouteImport } from './routes/s.$code'
 import { Route as PromptsSlugRouteImport } from './routes/prompts.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
+import { Route as CSlugRouteImport } from './routes/c.$slug'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminPromptsRouteImport } from './routes/admin.prompts'
 import { Route as AdminDeployRouteImport } from './routes/admin.deploy'
 import { Route as AdminCommentsRouteImport } from './routes/admin.comments'
+import { Route as AdminCollectionsRouteImport } from './routes/admin.collections'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminPromptsIndexRouteImport } from './routes/admin.prompts.index'
+import { Route as AdminCollectionsIndexRouteImport } from './routes/admin.collections.index'
 import { Route as ApiPublicVaultRouteImport } from './routes/api.public.vault'
 import { Route as AdminPromptsIdRouteImport } from './routes/admin.prompts.$id'
+import { Route as AdminCollectionsIdRouteImport } from './routes/admin.collections.$id'
 
 const SavedRoute = SavedRouteImport.update({
   id: '/saved',
@@ -36,6 +41,11 @@ const SavedRoute = SavedRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsRoute = CollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrowseRoute = BrowseRouteImport.update({
@@ -73,6 +83,11 @@ const PSlugRoute = PSlugRouteImport.update({
   path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CSlugRoute = CSlugRouteImport.update({
+  id: '/c/$slug',
+  path: '/c/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -98,6 +113,11 @@ const AdminCommentsRoute = AdminCommentsRouteImport.update({
   path: '/comments',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCollectionsRoute = AdminCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -107,6 +127,11 @@ const AdminPromptsIndexRoute = AdminPromptsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminPromptsRoute,
+} as any)
+const AdminCollectionsIndexRoute = AdminCollectionsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminCollectionsRoute,
 } as any)
 const ApiPublicVaultRoute = ApiPublicVaultRouteImport.update({
   id: '/api/public/vault',
@@ -118,30 +143,41 @@ const AdminPromptsIdRoute = AdminPromptsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AdminPromptsRoute,
 } as any)
+const AdminCollectionsIdRoute = AdminCollectionsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminCollectionsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/collections': typeof CollectionsRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRouteWithChildren
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/prompts': typeof AdminPromptsRouteWithChildren
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/c/$slug': typeof CSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/prompts/$slug': typeof PromptsSlugRoute
   '/s/$code': typeof SCodeRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/collections/$id': typeof AdminCollectionsIdRoute
   '/admin/prompts/$id': typeof AdminPromptsIdRoute
   '/api/public/vault': typeof ApiPublicVaultRoute
+  '/admin/collections/': typeof AdminCollectionsIndexRoute
   '/admin/prompts/': typeof AdminPromptsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/collections': typeof CollectionsRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -149,12 +185,15 @@ export interface FileRoutesByTo {
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/c/$slug': typeof CSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/prompts/$slug': typeof PromptsSlugRoute
   '/s/$code': typeof SCodeRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/collections/$id': typeof AdminCollectionsIdRoute
   '/admin/prompts/$id': typeof AdminPromptsIdRoute
   '/api/public/vault': typeof ApiPublicVaultRoute
+  '/admin/collections': typeof AdminCollectionsIndexRoute
   '/admin/prompts': typeof AdminPromptsIndexRoute
 }
 export interface FileRoutesById {
@@ -162,20 +201,25 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/collections': typeof CollectionsRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRouteWithChildren
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/prompts': typeof AdminPromptsRouteWithChildren
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/c/$slug': typeof CSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/prompts/$slug': typeof PromptsSlugRoute
   '/s/$code': typeof SCodeRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/collections/$id': typeof AdminCollectionsIdRoute
   '/admin/prompts/$id': typeof AdminPromptsIdRoute
   '/api/public/vault': typeof ApiPublicVaultRoute
+  '/admin/collections/': typeof AdminCollectionsIndexRoute
   '/admin/prompts/': typeof AdminPromptsIndexRoute
 }
 export interface FileRouteTypes {
@@ -184,25 +228,31 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/collections'
     | '/login'
     | '/saved'
     | '/admin/categories'
+    | '/admin/collections'
     | '/admin/comments'
     | '/admin/deploy'
     | '/admin/prompts'
     | '/admin/security'
     | '/admin/settings'
+    | '/c/$slug'
     | '/p/$slug'
     | '/prompts/$slug'
     | '/s/$code'
     | '/admin/'
+    | '/admin/collections/$id'
     | '/admin/prompts/$id'
     | '/api/public/vault'
+    | '/admin/collections/'
     | '/admin/prompts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/browse'
+    | '/collections'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -210,32 +260,40 @@ export interface FileRouteTypes {
     | '/admin/deploy'
     | '/admin/security'
     | '/admin/settings'
+    | '/c/$slug'
     | '/p/$slug'
     | '/prompts/$slug'
     | '/s/$code'
     | '/admin'
+    | '/admin/collections/$id'
     | '/admin/prompts/$id'
     | '/api/public/vault'
+    | '/admin/collections'
     | '/admin/prompts'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/browse'
+    | '/collections'
     | '/login'
     | '/saved'
     | '/admin/categories'
+    | '/admin/collections'
     | '/admin/comments'
     | '/admin/deploy'
     | '/admin/prompts'
     | '/admin/security'
     | '/admin/settings'
+    | '/c/$slug'
     | '/p/$slug'
     | '/prompts/$slug'
     | '/s/$code'
     | '/admin/'
+    | '/admin/collections/$id'
     | '/admin/prompts/$id'
     | '/api/public/vault'
+    | '/admin/collections/'
     | '/admin/prompts/'
   fileRoutesById: FileRoutesById
 }
@@ -243,8 +301,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   BrowseRoute: typeof BrowseRoute
+  CollectionsRoute: typeof CollectionsRoute
   LoginRoute: typeof LoginRoute
   SavedRoute: typeof SavedRoute
+  CSlugRoute: typeof CSlugRoute
   PSlugRoute: typeof PSlugRoute
   PromptsSlugRoute: typeof PromptsSlugRoute
   SCodeRoute: typeof SCodeRoute
@@ -265,6 +325,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections': {
+      id: '/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof CollectionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/browse': {
@@ -316,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/c/$slug': {
+      id: '/c/$slug'
+      path: '/c/$slug'
+      fullPath: '/c/$slug'
+      preLoaderRoute: typeof CSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -351,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCommentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/collections': {
+      id: '/admin/collections'
+      path: '/collections'
+      fullPath: '/admin/collections'
+      preLoaderRoute: typeof AdminCollectionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -364,6 +445,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/prompts/'
       preLoaderRoute: typeof AdminPromptsIndexRouteImport
       parentRoute: typeof AdminPromptsRoute
+    }
+    '/admin/collections/': {
+      id: '/admin/collections/'
+      path: '/'
+      fullPath: '/admin/collections/'
+      preLoaderRoute: typeof AdminCollectionsIndexRouteImport
+      parentRoute: typeof AdminCollectionsRoute
     }
     '/api/public/vault': {
       id: '/api/public/vault'
@@ -379,8 +467,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPromptsIdRouteImport
       parentRoute: typeof AdminPromptsRoute
     }
+    '/admin/collections/$id': {
+      id: '/admin/collections/$id'
+      path: '/$id'
+      fullPath: '/admin/collections/$id'
+      preLoaderRoute: typeof AdminCollectionsIdRouteImport
+      parentRoute: typeof AdminCollectionsRoute
+    }
   }
 }
+
+interface AdminCollectionsRouteChildren {
+  AdminCollectionsIdRoute: typeof AdminCollectionsIdRoute
+  AdminCollectionsIndexRoute: typeof AdminCollectionsIndexRoute
+}
+
+const AdminCollectionsRouteChildren: AdminCollectionsRouteChildren = {
+  AdminCollectionsIdRoute: AdminCollectionsIdRoute,
+  AdminCollectionsIndexRoute: AdminCollectionsIndexRoute,
+}
+
+const AdminCollectionsRouteWithChildren =
+  AdminCollectionsRoute._addFileChildren(AdminCollectionsRouteChildren)
 
 interface AdminPromptsRouteChildren {
   AdminPromptsIdRoute: typeof AdminPromptsIdRoute
@@ -398,6 +506,7 @@ const AdminPromptsRouteWithChildren = AdminPromptsRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCollectionsRoute: typeof AdminCollectionsRouteWithChildren
   AdminCommentsRoute: typeof AdminCommentsRoute
   AdminDeployRoute: typeof AdminDeployRoute
   AdminPromptsRoute: typeof AdminPromptsRouteWithChildren
@@ -408,6 +517,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCollectionsRoute: AdminCollectionsRouteWithChildren,
   AdminCommentsRoute: AdminCommentsRoute,
   AdminDeployRoute: AdminDeployRoute,
   AdminPromptsRoute: AdminPromptsRouteWithChildren,
@@ -422,8 +532,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   BrowseRoute: BrowseRoute,
+  CollectionsRoute: CollectionsRoute,
   LoginRoute: LoginRoute,
   SavedRoute: SavedRoute,
+  CSlugRoute: CSlugRoute,
   PSlugRoute: PSlugRoute,
   PromptsSlugRoute: PromptsSlugRoute,
   SCodeRoute: SCodeRoute,
@@ -432,13 +544,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

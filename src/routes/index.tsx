@@ -1,11 +1,11 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles, Search, Bot, Image as ImageIcon, Video, Music, ChevronDown,
-  Grid3x3, List, Flame, ArrowRight, BookOpen, Copy as CopyIcon, Cpu, Lock,
+  Grid3x3, List, Flame, ArrowRight, BookOpen, Copy as CopyIcon, Cpu, Lock, Layers,
 } from "lucide-react";
 import { PromptCard, PromptRow, PromptCardSkeleton, type PromptListItem } from "@/components/prompt-card";
 import { LoadError } from "@/components/load-error";
@@ -132,6 +132,22 @@ function HomePage() {
       const q = applyPromptVisibility(base, { includeLocked: showLocked });
       const { data } = await q.order("view_count", { ascending: false }).limit(8);
       return (data ?? []) as unknown as PromptListItem[];
+    },
+    staleTime: STALE,
+  });
+
+  // Featured collections
+  const { data: collections } = useQuery({
+    queryKey: ["home-collections"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("collections")
+        .select("id,slug,name,description,accent_color,icon,is_featured,collection_prompts(prompt_id)")
+        .eq("is_published", true)
+        .order("is_featured", { ascending: false })
+        .order("display_order", { ascending: true })
+        .limit(6);
+      return data ?? [];
     },
     staleTime: STALE,
   });
@@ -287,6 +303,61 @@ function HomePage() {
           })}
         </div>
       </section>
+
+      {/* COLLECTIONS */}
+      {collections && collections.length > 0 && (
+        <section className="mx-auto max-w-7xl px-6 py-12">
+          <div className="flex items-end justify-between mb-6 gap-4 flex-wrap">
+            <div>
+              <h2 className="text-3xl font-bold flex items-center gap-2"><Layers className="h-6 w-6 text-primary" /> Collections</h2>
+              <p className="mt-1 text-muted-foreground">Themed bundles — grab a whole workflow at once.</p>
+            </div>
+            <Link to="/collections" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:opacity-80">
+              View all <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {collections.slice(0, 3).map((c: any, i) => {
+              const count = c.collection_prompts?.length ?? 0;
+              const accent = c.accent_color || "#6366f1";
+              return (
+                <motion.div
+                  key={c.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: Math.min(i * 0.06, 0.3) }}
+                >
+                  <Link
+                    to="/c/$slug"
+                    params={{ slug: c.slug }}
+                    className="vault-card group relative block rounded-2xl p-5 hover:-translate-y-1 transition-all overflow-hidden h-full"
+                    style={{ borderColor: `${accent}40` }}
+                  >
+                    <div aria-hidden className="absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-20 blur-3xl" style={{ backgroundColor: accent }} />
+                    <div className="relative">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="grid h-11 w-11 place-items-center rounded-xl text-2xl" style={{ backgroundColor: `${accent}20`, color: accent }}>
+                          {c.icon || <Layers className="h-5 w-5" />}
+                        </div>
+                        {c.is_featured && <span className="text-[10px] uppercase tracking-wider rounded-full bg-accent/15 text-accent px-2 py-0.5">Featured</span>}
+                      </div>
+                      <h3 className="text-lg font-bold mb-1.5 group-hover:text-primary transition-colors">{c.name}</h3>
+                      {c.description && <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{c.description}</p>}
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground">{count} prompt{count === 1 ? "" : "s"}</span>
+                        <span className="inline-flex items-center gap-1 font-medium" style={{ color: accent }}>
+                          Explore <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* FEATURED */}
       {featured && featured.length > 0 && (

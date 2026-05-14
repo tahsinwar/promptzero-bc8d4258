@@ -6,7 +6,7 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LayoutDashboard, FileText, FolderTree, MessageSquare, Settings,
-  LogOut, Bell, Menu, X, Rocket, Shield,
+  LogOut, Bell, Menu, X, Rocket, Shield, Layers,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,6 +37,7 @@ function usePendingCount() {
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/prompts", label: "Prompts", icon: FileText },
+  { to: "/admin/collections", label: "Collections", icon: Layers },
   { to: "/admin/categories", label: "Categories & Tags", icon: FolderTree },
   { to: "/admin/comments", label: "Comments & Questions", icon: MessageSquare, badge: "pending" as const },
   { to: "/admin/security", label: "Security", icon: Shield },

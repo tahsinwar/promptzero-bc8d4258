@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Vault, Search, Sun, Moon, ShieldCheck, Sparkles, Bookmark, Github, Twitter, Linkedin, Mail, Heart } from "lucide-react";
+import { Vault, Search, Sun, Moon, ShieldCheck, Sparkles, Bookmark, Github, Twitter, Linkedin, Mail, Heart, Layers } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -90,6 +90,9 @@ function Navbar() {
         </form>
 
         <nav className="flex items-center gap-1 text-sm">
+          <Link to="/collections" activeProps={{ className: "text-foreground" }} className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-muted-foreground hover:text-foreground transition-colors">
+            <Layers className="h-4 w-4" /> Collections
+          </Link>
           <Link to="/saved" activeProps={{ className: "text-foreground" }} className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-muted-foreground hover:text-foreground transition-colors">
             <Bookmark className="h-4 w-4" /> Saved
           </Link>
@@ -139,6 +142,7 @@ function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">All Prompts</Link></li>
               <li><Link to="/browse" className="text-muted-foreground hover:text-primary transition-colors">Browse Categories</Link></li>
+              <li><Link to="/collections" className="text-muted-foreground hover:text-primary transition-colors">Collections</Link></li>
               <li><Link to="/saved" className="text-muted-foreground hover:text-primary transition-colors">Saved Prompts</Link></li>
             </ul>
           </div>
