@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles, Search, Bot, Image as ImageIcon, Video, Music, ChevronDown,
@@ -497,13 +497,37 @@ function HomePage() {
 }
 
 function Stat({ label, value, icon: Icon }: { label: string; value: number | string; icon: React.ComponentType<{ className?: string }> }) {
+  const isNumber = typeof value === "number";
+  const animated = useCountUp(isNumber ? (value as number) : 0, 1200);
   return (
     <div className="vault-card rounded-xl px-4 py-5">
       <Icon className="mx-auto h-5 w-5 text-primary mb-2" />
-      <div className="text-2xl font-bold">{typeof value === "number" ? value.toLocaleString() : value}</div>
+      <div className="text-2xl font-bold tabular-nums">{isNumber ? animated.toLocaleString() : value}</div>
       <div className="text-xs text-muted-foreground uppercase tracking-wider">{label}</div>
     </div>
   );
+}
+
+function useCountUp(target: number, duration = 1200) {
+  const [n, setN] = useState(0);
+  const startRef = useRef<number | null>(null);
+  const fromRef = useRef(0);
+  useEffect(() => {
+    fromRef.current = n;
+    startRef.current = null;
+    let raf = 0;
+    const step = (t: number) => {
+      if (startRef.current === null) startRef.current = t;
+      const p = Math.min(1, (t - startRef.current) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(fromRef.current + (target - fromRef.current) * eased));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target, duration]);
+  return n;
 }
 
 function SelectInput({
