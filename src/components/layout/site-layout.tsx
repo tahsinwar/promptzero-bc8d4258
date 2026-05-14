@@ -142,6 +142,7 @@ function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">All Prompts</Link></li>
               <li><Link to="/browse" className="text-muted-foreground hover:text-primary transition-colors">Browse Categories</Link></li>
+              <li><Link to="/collections" className="text-muted-foreground hover:text-primary transition-colors">Collections</Link></li>
               <li><Link to="/saved" className="text-muted-foreground hover:text-primary transition-colors">Saved Prompts</Link></li>
             </ul>
           </div>
