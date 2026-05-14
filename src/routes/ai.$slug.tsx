@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AI_TOOL_BY_SLUG, CAT_COLOR, type AICategory } from "@/lib/ai-tools";
+import { AILogo } from "@/components/ai-logo";
 import { applyPromptVisibility } from "@/lib/prompt-visibility";
 import { PromptCard, PromptCardSkeleton, type PromptListItem } from "@/components/prompt-card";
 import { LoadError } from "@/components/load-error";
@@ -135,7 +136,7 @@ function AIToolPage() {
                   boxShadow: `0 20px 60px -20px ${tool.color}`,
                 }}
               >
-                {tool.initials}
+                <AILogo tool={tool} size={64} />
               </div>
               <motion.div
                 aria-hidden
