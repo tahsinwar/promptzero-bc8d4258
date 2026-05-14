@@ -6,7 +6,7 @@ export function AILogo({
   size = 28,
   className = "",
 }: {
-  tool: Pick<AITool, "name" | "logo" | "color" | "initials">;
+  tool: Pick<AITool, "name" | "logo" | "color" | "initials" | "company">;
   size?: number;
   className?: string;
 }) {
@@ -14,10 +14,13 @@ export function AILogo({
     tool.logo ? "loading" : "error",
   );
 
+  const tooltip = tool.company ? `${tool.name} — ${tool.company}` : tool.name;
+
   if (status === "error" || !tool.logo) {
     return (
       <span
         aria-label={`${tool.name} logo`}
+        title={tooltip}
         className={`grid place-items-center font-bold ${className}`}
         style={{
           width: size,
@@ -33,6 +36,8 @@ export function AILogo({
 
   return (
     <span
+      title={tooltip}
+      aria-label={tooltip}
       className={`relative inline-block ${className}`}
       style={{ width: size, height: size }}
     >
