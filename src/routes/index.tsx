@@ -5,8 +5,9 @@ import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles, Search, Bot, Image as ImageIcon, Video, Music, ChevronDown,
-  Grid3x3, List, Flame, ArrowRight, BookOpen, Copy as CopyIcon, Cpu, Lock,
+  Grid3x3, List, Flame, ArrowRight, BookOpen, Copy as CopyIcon, Cpu, Lock, Layers,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { PromptCard, PromptRow, PromptCardSkeleton, type PromptListItem } from "@/components/prompt-card";
 import { LoadError } from "@/components/load-error";
 import { useViewMode } from "@/hooks/use-bookmarks";
@@ -132,6 +133,22 @@ function HomePage() {
       const q = applyPromptVisibility(base, { includeLocked: showLocked });
       const { data } = await q.order("view_count", { ascending: false }).limit(8);
       return (data ?? []) as unknown as PromptListItem[];
+    },
+    staleTime: STALE,
+  });
+
+  // Featured collections
+  const { data: collections } = useQuery({
+    queryKey: ["home-collections"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("collections")
+        .select("id,slug,name,description,accent_color,icon,is_featured,collection_prompts(prompt_id)")
+        .eq("is_published", true)
+        .order("is_featured", { ascending: false })
+        .order("display_order", { ascending: true })
+        .limit(6);
+      return data ?? [];
     },
     staleTime: STALE,
   });
