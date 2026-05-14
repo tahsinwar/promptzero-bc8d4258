@@ -23,6 +23,7 @@ import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminPromptsRouteImport } from './routes/admin.prompts'
 import { Route as AdminDeployRouteImport } from './routes/admin.deploy'
 import { Route as AdminCommentsRouteImport } from './routes/admin.comments'
+import { Route as AdminCollectionsRouteImport } from './routes/admin.collections'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminPromptsIndexRouteImport } from './routes/admin.prompts.index'
 import { Route as ApiPublicVaultRouteImport } from './routes/api.public.vault'
@@ -98,6 +99,11 @@ const AdminCommentsRoute = AdminCommentsRouteImport.update({
   path: '/comments',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCollectionsRoute = AdminCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRoute
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/prompts': typeof AdminPromptsRouteWithChildren
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRoute
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/security': typeof AdminSecurityRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/collections': typeof AdminCollectionsRoute
   '/admin/comments': typeof AdminCommentsRoute
   '/admin/deploy': typeof AdminDeployRoute
   '/admin/prompts': typeof AdminPromptsRouteWithChildren
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/saved'
     | '/admin/categories'
+    | '/admin/collections'
     | '/admin/comments'
     | '/admin/deploy'
     | '/admin/prompts'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/saved'
     | '/admin/categories'
+    | '/admin/collections'
     | '/admin/comments'
     | '/admin/deploy'
     | '/admin/security'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/saved'
     | '/admin/categories'
+    | '/admin/collections'
     | '/admin/comments'
     | '/admin/deploy'
     | '/admin/prompts'
@@ -351,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCommentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/collections': {
+      id: '/admin/collections'
+      path: '/collections'
+      fullPath: '/admin/collections'
+      preLoaderRoute: typeof AdminCollectionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -398,6 +417,7 @@ const AdminPromptsRouteWithChildren = AdminPromptsRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCollectionsRoute: typeof AdminCollectionsRoute
   AdminCommentsRoute: typeof AdminCommentsRoute
   AdminDeployRoute: typeof AdminDeployRoute
   AdminPromptsRoute: typeof AdminPromptsRouteWithChildren
@@ -408,6 +428,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCollectionsRoute: AdminCollectionsRoute,
   AdminCommentsRoute: AdminCommentsRoute,
   AdminDeployRoute: AdminDeployRoute,
   AdminPromptsRoute: AdminPromptsRouteWithChildren,
@@ -432,3 +453,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
