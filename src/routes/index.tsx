@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useEffect, useState, type FormEvent } from "react";
@@ -7,7 +7,6 @@ import {
   Sparkles, Search, Bot, Image as ImageIcon, Video, Music, ChevronDown,
   Grid3x3, List, Flame, ArrowRight, BookOpen, Copy as CopyIcon, Cpu, Lock, Layers,
 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { PromptCard, PromptRow, PromptCardSkeleton, type PromptListItem } from "@/components/prompt-card";
 import { LoadError } from "@/components/load-error";
 import { useViewMode } from "@/hooks/use-bookmarks";
