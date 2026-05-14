@@ -147,9 +147,13 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Connect */}
+          {/* Company */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground/80 mb-3">Connect</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground/80 mb-3">Company</h4>
+            <ul className="space-y-2 text-sm mb-5">
+              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</Link></li>
+            </ul>
             <div className="flex items-center gap-2">
               <a
                 href="https://github.com/tahsinwar"

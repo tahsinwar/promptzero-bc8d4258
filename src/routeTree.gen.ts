@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -42,6 +43,11 @@ const SavedRoute = SavedRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollectionsRoute = CollectionsRouteImport.update({
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
   '/collections': typeof CollectionsRoute
+  '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
   '/collections': typeof CollectionsRoute
+  '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -211,6 +219,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
   '/collections': typeof CollectionsRoute
+  '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/saved': typeof SavedRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/browse'
     | '/collections'
+    | '/contact'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/browse'
     | '/collections'
+    | '/contact'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -288,6 +299,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/browse'
     | '/collections'
+    | '/contact'
     | '/login'
     | '/saved'
     | '/admin/categories'
@@ -315,6 +327,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   BrowseRoute: typeof BrowseRoute
   CollectionsRoute: typeof CollectionsRoute
+  ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
   SavedRoute: typeof SavedRoute
   CSlugRoute: typeof CSlugRoute
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collections': {
@@ -554,6 +574,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   BrowseRoute: BrowseRoute,
   CollectionsRoute: CollectionsRoute,
+  ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
   SavedRoute: SavedRoute,
   CSlugRoute: CSlugRoute,
